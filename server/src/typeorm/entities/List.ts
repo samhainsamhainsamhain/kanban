@@ -14,7 +14,7 @@ export class List {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'longtext' })
+  @Column({ type: 'text' })
   title: string;
 
   @CreateDateColumn({ type: 'timestamp' })
