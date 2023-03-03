@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ListsModule } from './lists/lists.module';
+import { TodosModule } from './todos/todos.module';
 
 import entities from './typeorm/';
 
@@ -26,6 +27,7 @@ import entities from './typeorm/';
       inject: [ConfigService],
     }),
     ListsModule,
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -20,7 +20,7 @@ export class ListsService {
   }
 
   async createList(createListDetails: CreateListRequest) {
-    return await this.listRepository.create({
+    return await this.listRepository.save({
       ...createListDetails,
     });
   }

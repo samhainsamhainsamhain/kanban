@@ -14,10 +14,10 @@ export class Todo {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'longtext' })
+  @Column({ type: 'text' })
   title: string;
 
-  @Column({ type: 'longtext', default: null })
+  @Column({ type: 'text', default: null })
   description: string;
 
   @CreateDateColumn({ type: 'timestamp' })

@@ -1,8 +1,9 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
 import { Todo } from 'src/typeorm/entities/Todo';
 
 export class CreateListRequest {
   @IsString()
+  @IsNotEmpty()
   title: string;
 }
 
