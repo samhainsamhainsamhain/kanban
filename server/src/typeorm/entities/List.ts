@@ -20,6 +20,6 @@ export class List {
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: string;
 
-  @OneToMany(() => Todo, (todos) => todos.todoList)
+  @OneToMany(() => Todo, (todos) => todos.list)
   todos: Todo[];
 }

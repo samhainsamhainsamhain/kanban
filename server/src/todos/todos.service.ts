@@ -16,31 +16,33 @@ export class TodosService {
     private todosRepository: Repository<Todo>,
 
     @InjectRepository(List)
-    private todoListsRepository: Repository<List>,
+    private listsRepository: Repository<List>,
   ) {}
 
   async fetchTodos(id: number) {
     const todos = await this.todosRepository
       .createQueryBuilder()
-      .where('todoListId = :id', { id })
+      .where('listId = :id', { id })
       .getMany();
 
     return todos;
   }
 
   async createTodo(createTodoDetails: CreateTodoRequest) {
-    const todoList = await this.todoListsRepository.findOneBy({
+    const list = await this.listsRepository.findOneBy({
       id: createTodoDetails.listId,
     });
 
-    if (!todoList) {
+    if (!list) {
       throw new HttpException('Todo List not found.', HttpStatus.BAD_REQUEST);
     }
 
-    return await this.todosRepository.save({
+    const newTodo = this.todosRepository.create({
       ...createTodoDetails,
-      todoList,
+      list,
     });
+
+    return await this.todosRepository.save(newTodo);
   }
 
   async updateTodoById(updateTodoDetails: UpdateTodoRequest) {
@@ -51,10 +53,15 @@ export class TodosService {
     if (!todo)
       throw new HttpException('Todo not found.', HttpStatus.BAD_REQUEST);
 
-    return await this.todosRepository.update(
-      { id: updateTodoDetails.id },
-      { ...updateTodoDetails },
-    );
+    await this.todosRepository.save({
+      ...todo,
+      ...updateTodoDetails,
+    });
+
+    return await this.todosRepository.findOne({
+      where: { id: updateTodoDetails.id },
+      relations: { list: true },
+    });
   }
 
   async deleteTodoById(id: DeleteTodoRequest) {

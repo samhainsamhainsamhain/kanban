@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import {
   CreateListRequest,
   DeleteListRequest,
-  ListResponse,
   UpdateListRequest,
 } from './lists.dto';
 
@@ -16,13 +15,15 @@ export class ListsService {
   ) {}
 
   async fetchLists() {
-    return await this.listRepository.find();
+    return await this.listRepository.find({ relations: ['todos'] });
   }
 
   async createList(createListDetails: CreateListRequest) {
-    return await this.listRepository.save({
+    const newList = await this.listRepository.save({
       ...createListDetails,
     });
+
+    return { ...newList, todos: [] };
   }
 
   async updateList(updateListDetails: UpdateListRequest) {

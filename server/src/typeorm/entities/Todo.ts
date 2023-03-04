@@ -20,11 +20,14 @@ export class Todo {
   @Column({ type: 'text', default: null })
   description: string;
 
+  @Column({ type: 'bool', default: false })
+  status: boolean;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: string;
 
-  @ManyToOne(() => List, (todoList) => todoList.todos, {
+  @ManyToOne(() => List, (list) => list.todos, {
     onDelete: 'CASCADE',
   })
-  todoList: List;
+  list: List;
 }
