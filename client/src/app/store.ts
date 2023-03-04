@@ -1,6 +1,6 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
-import listsSlice from './slices/lists.slice';
+import listsSlice from './slices/lists/lists.slice';
 import modalSlice from './slices/modal.slice';
 
 export const store = configureStore({

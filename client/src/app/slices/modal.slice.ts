@@ -16,14 +16,14 @@ const modalSlice = createSlice({
     // modal
     openTodoModal: (
       state,
-      action: PayloadAction<{ listId: number; todoId: number }>
+      action: PayloadAction<{ listId: string; todoId: string }>
     ) => {
       const { listId, todoId } = action.payload;
       state.active = true;
       state.listId = listId;
       state.todoId = todoId;
     },
-    openListModal: (state, action: PayloadAction<{ listId: number }>) => {
+    openListModal: (state, action: PayloadAction<{ listId: string }>) => {
       const { listId } = action.payload;
       state.active = true;
       state.listId = listId;
@@ -31,8 +31,6 @@ const modalSlice = createSlice({
     },
     closeModal: (state) => {
       state.active = false;
-      state.listId = undefined;
-      state.todoId = undefined;
     },
   },
 });
