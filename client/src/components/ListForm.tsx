@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 
 import { useAppDispatch } from '../app/hooks';
-import { createList } from '../app/slices/lists.slice';
+import { addNewList } from '../app/slices/lists/lists.thunk';
 
 import AddIcon from '../assets/add.svg';
 
@@ -19,7 +19,7 @@ const ListForm: FC<ListFormProps> = ({}: ListFormProps) => {
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    dispatch(createList(title));
+    dispatch(addNewList({ title }));
     setTitle('');
   }
 

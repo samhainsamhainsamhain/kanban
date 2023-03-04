@@ -7,6 +7,7 @@ import './style.css';
 
 function App() {
   const { active } = useAppSelector((state) => state.modal);
+
   return (
     <div>
       <Kanban />

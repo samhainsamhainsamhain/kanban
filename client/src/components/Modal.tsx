@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectById } from '../app/slices/lists.slice';
+import { selectById } from '../app/slices/lists/lists.slice';
 import { closeModal } from '../app/slices/modal.slice';
 
 import { ListType } from '../models/List';
@@ -13,7 +13,9 @@ const Modal = () => {
 
   if ((!todoId && !listId) || !listId) return null;
 
-  const test = selectById(todoId || listId);
+  const data = selectById(todoId || listId);
+
+  if (!data) return null;
 
   const dispatch = useAppDispatch();
 
@@ -22,9 +24,9 @@ const Modal = () => {
   }
 
   const TypedModal = () => {
-    if ((test as TodoType).status !== undefined) {
-      return <TodoModal listId={listId} todo={test as TodoType} />;
-    } else return <ListModal list={test as ListType} />;
+    if ((data as TodoType).status !== undefined) {
+      return <TodoModal listId={listId} todo={data as TodoType} />;
+    } else return <ListModal list={data as ListType} />;
   };
 
   return (

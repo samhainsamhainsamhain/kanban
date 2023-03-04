@@ -1,12 +1,12 @@
 import { FC, useState } from 'react';
 
 import { useAppDispatch } from '../app/hooks';
-import { createTodo } from '../app/slices/lists.slice';
+import { createTodo } from '../app/slices/lists/lists.thunk';
 
 import AddIcon from '../assets/add.svg';
 
 type TodoFormProps = {
-  listId: number;
+  listId: string;
 };
 
 const TodoForm: FC<TodoFormProps> = ({ listId }: TodoFormProps) => {
@@ -21,7 +21,7 @@ const TodoForm: FC<TodoFormProps> = ({ listId }: TodoFormProps) => {
   function todoSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    dispatch(createTodo({ listId, todoTitle: title }));
+    dispatch(createTodo({ listId, title }));
     setTitle('');
   }
 

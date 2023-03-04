@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 
 import { useAppDispatch } from '../app/hooks';
-import { deleteTodo, updateTodo } from '../app/slices/lists.slice';
+import { deleteTodo, updateTodo } from '../app/slices/lists/lists.thunk';
 
 import { TodoType } from '../models/Todo';
 
@@ -12,7 +12,7 @@ import EditIcon from '../assets/edit.svg';
 
 type TodoModalProps = {
   todo: TodoType;
-  listId: number;
+  listId: string;
 };
 
 const TodoModal: FC<TodoModalProps> = ({ todo, listId }: TodoModalProps) => {
@@ -22,13 +22,11 @@ const TodoModal: FC<TodoModalProps> = ({ todo, listId }: TodoModalProps) => {
   const dispatch = useAppDispatch();
 
   function deleteTodoHandler() {
-    dispatch(deleteTodo({ listId, todoId: todo.id }));
+    dispatch(deleteTodo({ listId, id: todo.id }));
   }
 
   function toggleTodoHandler() {
-    dispatch(
-      updateTodo({ listId, newTodo: { ...todo, status: !todo.status } })
-    );
+    dispatch(updateTodo({ ...todo, status: !todo.status }));
   }
 
   function titleChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
@@ -43,12 +41,12 @@ const TodoModal: FC<TodoModalProps> = ({ todo, listId }: TodoModalProps) => {
 
   function titleSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    dispatch(updateTodo({ listId, newTodo }));
+    dispatch(updateTodo(newTodo));
     setEdit(false);
   }
 
   return (
-    <li className="group my-4 flex cursor-pointer justify-between rounded-md bg-sky-200 py-4 px-2">
+    <>
       {edit ? (
         <form className="flex flex-col" onSubmit={titleSubmitHandler}>
           <label htmlFor="Title">Title</label>
@@ -73,21 +71,7 @@ const TodoModal: FC<TodoModalProps> = ({ todo, listId }: TodoModalProps) => {
         </form>
       ) : (
         <>
-          <div>
-            <h2 className={`${todo.status && 'line-through'} text-2xl`}>
-              {todo.title}
-            </h2>
-            {todo.description && (
-              <p
-                className={`${
-                  todo.status && 'line-through'
-                } my-2 w-full max-w-md break-words rounded-md bg-slate-100 p-2`}
-              >
-                {todo.description}
-              </p>
-            )}
-          </div>
-          <div className="flex h-6 items-center justify-center">
+          <div className="flex h-8 justify-end">
             <button
               onClick={toggleTodoHandler}
               className="rounded-2xl p-1 hover:bg-green-600"
@@ -107,9 +91,25 @@ const TodoModal: FC<TodoModalProps> = ({ todo, listId }: TodoModalProps) => {
               <DeleteIcon width={24} height={24} />
             </button>
           </div>
+          <li className="group my-4 flex min-w-[320px] cursor-pointer justify-between rounded-md bg-sky-200 py-4 px-2">
+            <div className="w-full">
+              <h2 className={`${todo.status && 'line-through'} text-2xl`}>
+                {todo.title}
+              </h2>
+              {todo.description && (
+                <p
+                  className={`${
+                    todo.status && 'line-through'
+                  } my-2 w-full max-w-md break-words rounded-md bg-slate-100 p-2`}
+                >
+                  {todo.description}
+                </p>
+              )}
+            </div>
+          </li>
         </>
       )}
-    </li>
+    </>
   );
 };
 

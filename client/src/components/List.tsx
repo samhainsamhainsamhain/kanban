@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { useAppDispatch } from '../app/hooks';
-import { deleteList } from '../app/slices/lists.slice';
+import { deleteList } from '../app/slices/lists/lists.thunk';
 import { openListModal } from '../app/slices/modal.slice';
 
 import Todo from './Todo';
@@ -20,7 +20,7 @@ const List: FC<ListProps> = ({ list }: ListProps) => {
 
   function deleteListHandler(event: React.MouseEvent<HTMLElement>) {
     event.stopPropagation();
-    dispatch(deleteList(list.id));
+    dispatch(deleteList({ id: list.id }));
   }
 
   function openListModalHandler() {

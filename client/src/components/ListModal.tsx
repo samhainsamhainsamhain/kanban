@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 
 import { useAppDispatch } from '../app/hooks';
-import { deleteList, updateList } from '../app/slices/lists.slice';
+import { deleteList, updateList } from '../app/slices/lists/lists.thunk';
 
 import { ListType } from '../models/List';
 
@@ -23,61 +23,67 @@ const ListModal: FC<ListModalProps> = ({ list }: ListModalProps) => {
   const dispatch = useAppDispatch();
 
   function deleteListHandler() {
-    dispatch(deleteList(list.id));
+    dispatch(deleteList({ id: list.id }));
   }
 
-  function titleChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
+  function titleChangeHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setTitle(event.currentTarget.value);
   }
 
   function titleSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    dispatch(updateList({ listId: list.id, newTitle: title }));
+    dispatch(updateList({ id: list.id, title }));
     setEdit(false);
   }
 
   return (
-    <div className="min-w-72 mx-2 mt-4 flex w-72 flex-col rounded-md bg-sky-200 px-2 py-4">
+    <>
       {edit ? (
-        <form onSubmit={titleSubmitHandler}>
-          <input
+        <form className="flex flex-col" onSubmit={titleSubmitHandler}>
+          <textarea
             className="p-1 text-2xl font-bold group-hover:text-stone-200"
-            type="text"
             value={title}
             onChange={titleChangeHandler}
           />
-          <button type="submit">
+          <button
+            className="mt-2 self-end rounded-md bg-blue-600 py-2 px-4"
+            type="submit"
+          >
             <DoneIcon width={24} height={24} />
           </button>
         </form>
       ) : (
-        <div className="focus-within: group flex cursor-pointer justify-between rounded-md p-2 hover:bg-blue-600">
-          <h2 className="p-1 text-2xl font-bold group-hover:text-stone-200">
-            {list.title}
-          </h2>
-          <div className="flex items-center justify-center">
+        <>
+          <div className="flex justify-end">
             <button
               onClick={() => setEdit(true)}
-              className="invisible rounded-2xl p-1 hover:bg-yellow-600 group-hover:visible"
+              className="rounded-2xl p-1 hover:bg-yellow-600 "
             >
-              <EditIcon width={24} height={24} fill="#e7e5e4" />
+              <EditIcon width={24} height={24} fill="#000000" />
             </button>
             <button
               onClick={deleteListHandler}
-              className="invisible rounded-2xl p-1 hover:bg-red-600 group-hover:visible"
+              className=" rounded-2xl p-1 hover:bg-red-600 "
             >
-              <DeleteIcon width={24} height={24} fill="#e7e5e4" />
+              <DeleteIcon width={24} height={24} fill="#000000" />
             </button>
           </div>
-        </div>
+          <div className="min-w-72 mx-2 mt-4 flex w-72 flex-col rounded-md bg-sky-200 px-2 py-4">
+            <div className="flex cursor-pointer justify-between rounded-md p-2 hover:bg-blue-600">
+              <h2 className="p-1 text-2xl font-bold group-hover:text-stone-200">
+                {list.title}
+              </h2>
+            </div>
+            <ul>
+              {list.todos.map((todo) => (
+                <Todo todo={todo} listId={list.id} key={Math.random()} />
+              ))}
+              <TodoForm listId={list.id} />
+            </ul>
+          </div>
+        </>
       )}
-      <ul>
-        {list.todos.map((todo) => (
-          <Todo todo={todo} listId={list.id} key={Math.random()} />
-        ))}
-        <TodoForm listId={list.id} />
-      </ul>
-    </div>
+    </>
   );
 };
 

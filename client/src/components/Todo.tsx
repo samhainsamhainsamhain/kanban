@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { useAppDispatch } from '../app/hooks';
-import { deleteTodo, updateTodo } from '../app/slices/lists.slice';
+import { deleteTodo, updateTodo } from '../app/slices/lists/lists.thunk';
 import { openTodoModal } from '../app/slices/modal.slice';
 
 import { TodoType } from '../models/Todo';
@@ -11,7 +11,7 @@ import CheckboxIcon from '../assets/checkbox.svg';
 
 type TodoProps = {
   todo: TodoType;
-  listId: number;
+  listId: string;
 };
 
 const Todo: FC<TodoProps> = ({ todo, listId }: TodoProps) => {
@@ -19,14 +19,12 @@ const Todo: FC<TodoProps> = ({ todo, listId }: TodoProps) => {
 
   function deleteTodoHandler(event: React.MouseEvent<HTMLElement>) {
     event.stopPropagation();
-    dispatch(deleteTodo({ listId, todoId: todo.id }));
+    dispatch(deleteTodo({ listId, id: todo.id }));
   }
 
   function toggleTodoHandler(event: React.MouseEvent<HTMLElement>) {
     event.stopPropagation();
-    dispatch(
-      updateTodo({ listId, newTodo: { ...todo, status: !todo.status } })
-    );
+    dispatch(updateTodo({ ...todo, status: !todo.status }));
   }
 
   function openTodoModalHandler() {
